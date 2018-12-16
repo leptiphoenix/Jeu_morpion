@@ -6,17 +6,17 @@
 package morpion.tournament.Tournoi;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Observable;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import morpion.tournament.Partie.Message.*;
 
 /**
@@ -28,19 +28,19 @@ public class VueSelection extends Observable {
     private final JFrame window;
     private final JButton btnAjouter;
     private final JButton btnCommencer;
-    PanelPerso contentPanel = new PanelPerso();
+    private PanelPerso contentPanel = new PanelPerso();
+    private PanelPerso bottomPanel;
+    private Dimension dim;
 
     @SuppressWarnings("Convert2Lambda")
-    public VueSelection(HashMap<String, Participant> participants) {
+    public VueSelection(ArrayList<Participant> participants) {
 
         window = new JFrame();
         window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
-        window.setSize(600, 150);
-        window.setResizable(false);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
 
+        window.setResizable(false);
+        
         PanelPerso mainPanel = new PanelPerso(new BorderLayout());
         window.add(mainPanel);
 
@@ -56,7 +56,7 @@ public class VueSelection extends Observable {
         actualiser(participants);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-        PanelPerso bottomPanel = new PanelPerso(new GridLayout(1, 3));
+       bottomPanel = new PanelPerso(new GridLayout(1, 3));
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         btnAjouter = new JButton("Ajouter");
@@ -85,44 +85,47 @@ public class VueSelection extends Observable {
 
     }
 
-    public void actualiser(HashMap<String, Participant> participants) {
-        contentPanel.removeAll();
+    public void actualiser(ArrayList<Participant> participants) {
+        getContentPanel().removeAll();
         if (participants.size() > 0) {
-            window.resize(600, 100 + 50*participants.size());
-            contentPanel.setLayout(new GridLayout(participants.size(), 3));
+            getWindow().resize(1000, 100 + 50*participants.size());
+            getContentPanel().setLayout(new GridLayout(participants.size(), 3));
 
-            for (String cle : participants.keySet()) {
-                contentPanel.add(new JLabel(participants.get(cle).getSurnom()));
+            for (int i = 0; i < participants.size();i++) {
+                getContentPanel().add(new JLabel(participants.get(i).getSurnom()));
+                int clé = i;
                 JButton btn = new JButton("Modifier");
-                btn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        setChanged();
-                        notifyObservers(new MessageCle(Action.MODIFIE, cle));
-                        clearChanged();
-                    }
+                btn.addActionListener((ActionEvent e) -> {
+                    setChanged();
+                    notifyObservers(new MessageCle(Action.MODIFIE, clé));
+                    clearChanged();
                 });
-                contentPanel.add(btn);
+                getContentPanel().add(btn);
                 JButton btns = new JButton("Supprimer");
-                btns.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        setChanged();
-                        notifyObservers(new MessageCle(Action.SUPPRIME, cle));
-                        clearChanged();
-                    }
+                btns.addActionListener((ActionEvent e) -> {
+                    setChanged();
+                    notifyObservers(new MessageCle(Action.SUPPRIME, clé));
+                    clearChanged();
                 });
-                contentPanel.add(btns);
+                getContentPanel().add(btns);
             }
         } else {
-            window.resize(600, 150);
-            casev(contentPanel);
+            getWindow().resize(1000, 150);
+            casev(getContentPanel());
         }
-
+        dim = Toolkit.getDefaultToolkit().getScreenSize();
+        window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
+    }
+    
+    
+    public void msgErreur(){
+        ((JLabel) getBottomPanel().getComponent(1)).setText("Deux participants au moins sont nécessaire");
+        ((JLabel) getBottomPanel().getComponent(1)).setForeground(Color.red);
+        afficher();
     }
 
     public void afficher() {
-        this.window.setVisible(true);
+        this.getWindow().setVisible(true);
     }
 
     private void casev(PanelPerso panel) {
@@ -130,6 +133,41 @@ public class VueSelection extends Observable {
     }
 
     void close() {
-        this.window.dispose();
+        this.getWindow().dispose();
+    }
+
+    /**
+     * @return the window
+     */
+    public JFrame getWindow() {
+        return window;
+    }
+
+    /**
+     * @return the btnAjouter
+     */
+    public JButton getBtnAjouter() {
+        return btnAjouter;
+    }
+
+    /**
+     * @return the btnCommencer
+     */
+    public JButton getBtnCommencer() {
+        return btnCommencer;
+    }
+
+    /**
+     * @return the contentPanel
+     */
+    public PanelPerso getContentPanel() {
+        return contentPanel;
+    }
+
+    /**
+     * @return the bottomPanel
+     */
+    public PanelPerso getBottomPanel() {
+        return bottomPanel;
     }
 }

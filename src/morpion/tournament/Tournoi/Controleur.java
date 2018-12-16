@@ -26,45 +26,54 @@ public class Controleur implements Observer {
 
     public Controleur() {
         tournoi = new Tournoi();
+        tournoi.addParticipant(new Participant("a",0));
+        tournoi.addParticipant(new Participant("b",0));
+        tournoi.addParticipant(new Participant("c",0));
+        tournoi.addParticipant(new Participant("d",0));
+        tournoi.addParticipant(new Participant("e",0));
+        tournoi.addParticipant(new Participant("f",0));
         vueSelection = new VueSelection(tournoi.getListeParticipants());
         vueSelection.afficher();
         vueSelection.addObserver(this);
-        vueGrille = new VueGrille("Lois","Guillaume");
-        vueGrille.addObserver(this);
-        vueGrille.afficher();
-        vuePool = new VuePool(4);
-        vuePool.afficher();
-
     }
 
-    public void ajouter(String clé, String surnom, Preference pref) {
+    public void ajouter(int clé, String surnom, Preference pref) {
         vueModif = new VueModif(clé, surnom, pref.ordinal()+1);
         vueModif.afficher();
         vueModif.addObserver(this);
     }
 
     public void terminer(Observable o) {
+        tournoi.triAlpha();
         vueSelection.actualiser(tournoi.getListeParticipants());
         vueSelection.afficher();
         ((VueModif) o).close();
     }
-
+    
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Message) {
             if (((Message) arg).getAction() == Action.ANNULE) {
                 ((VueModif) o).close();
             } else if (((Message) arg).getAction() == Action.AJOUTE) {
-                ajouter("", "", Preference.VIEUX);
+                ajouter(-1, "", Preference.VIEUX);
             } else if (((Message) arg).getAction() == Action.COMMENCE) {
-                ((VueSelection) o).close();
+                if (tournoi.getListeParticipants().size()<2){
+                    vueSelection.msgErreur();
+                } else { 
+                    ((VueSelection) o).close();
+                    tournoi.phaseSuivante();
+                    vuePool = new VuePool(tournoi.getPhaseDePool());
+                    vuePool.afficher();
+                    vuePool.addObserver(this);
+                }
+                
             } else if (arg instanceof MessageParticipant) {
                 MessageParticipant messageParticipant = (MessageParticipant) arg;
                 Participant p = new Participant(messageParticipant.getSurnom().trim(), messageParticipant.getPref());
-                System.out.println(p.getPref());
                 if ((messageParticipant.getAction() == Action.VALIDE)) {
-                    if (messageParticipant.getClé().equals("")) {
-                        if (tournoi.getListeParticipants().get(p.getSurnom()) == null) {
+                    if (messageParticipant.getClé()==-1) {
+                        if (!(tournoi.ListePContient(p))) {
                             if (!(p.getSurnom().equals(""))){
                                 tournoi.addParticipant(p);
                                 terminer(o);
@@ -76,15 +85,14 @@ public class Controleur implements Observer {
                             ((VueModif) o).actualiser(true);
                         }
                     } else {
-                        if (tournoi.getListeParticipants().get(p.getSurnom()) == null) {
+                        System.out.println(p.getSurnom());
+                        System.out.println(tournoi.getListeParticipants().get(messageParticipant.getClé()));
+                        if (tournoi.ListePContient(p)&& !(p.getSurnom().equals(tournoi.getListeParticipants().get(messageParticipant.getClé()).getSurnom()))) {
+                            ((VueModif) o).actualiser(true);
+                        } else {
                             tournoi.getListeParticipants().remove(messageParticipant.getClé());
                             tournoi.addParticipant(p);
                             terminer(o);
-                        } else if (tournoi.getListeParticipants().get(p.getSurnom()).getSurnom().equals(messageParticipant.getClé())) {
-                            tournoi.getListeParticipants().replace(messageParticipant.getClé(), p);
-                            terminer(o);
-                        } else {
-                            ((VueModif) o).actualiser(true);
                         }
                     }
                 }
@@ -97,6 +105,10 @@ public class Controleur implements Observer {
                     vueSelection.actualiser(tournoi.getListeParticipants());
                     vueSelection.afficher();
                 }
+            }   else if (arg instanceof MessageJeu) {
+                MessageJeu messageJeu = (MessageJeu) arg;
+                System.out.println(messageJeu.getP1().toString());
+                System.out.println(messageJeu.getP2().toString());
             }
         }
     }

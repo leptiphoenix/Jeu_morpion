@@ -10,9 +10,9 @@ package morpion.tournament.Partie.Message;
  * @author deniaul
  */
 public class MessageCle extends Message{
-      private String clé;
+      private int clé;
       
-      public MessageCle(Action action,String clé){
+      public MessageCle(Action action,int clé){
         super(action);
         setClé(clé);
       
@@ -24,14 +24,14 @@ public class MessageCle extends Message{
     /**
      * @return the clé
      */
-    public String getClé() {
+    public int getClé() {
         return clé;
     }
 
     /**
      * @param clé the clé to set
      */
-    public void setClé(String clé) {
+    public void setClé(int clé) {
         this.clé = clé;
     }
       

@@ -16,5 +16,9 @@ public enum Action {
     ANNULE,
     COMMENCE,
     VALIDE,
-    SUPPRIME
+    SUPPRIME,
+    JOUE,
+    REGLES,
+    AFFICHESCORE,
+    SELECTIONNE
 }

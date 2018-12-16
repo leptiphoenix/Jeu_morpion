@@ -14,7 +14,7 @@ public class MessageParticipant extends MessageCle {
     private String surnom;
     private int pref;
     
-    public MessageParticipant(Action action,String clé,String surnom,int pref){
+    public MessageParticipant(Action action,int clé,String surnom,int pref){
         super(action,clé);
         setSurnom(surnom);
         setPref(pref);

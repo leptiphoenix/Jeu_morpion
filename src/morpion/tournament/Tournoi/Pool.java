@@ -5,12 +5,25 @@
  */
 package morpion.tournament.Tournoi;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+
+
 
 /**
  *
  * @author deniaul
  */
 public class Pool {
-    private HashMap<Integer,Participant> joueurs;
+    private ArrayList<Participant> joueurs;
+    
+    Pool(ArrayList<Participant> joueurs) {
+        this.joueurs = joueurs;
+    }
+
+    /**
+     * @return the joueurs
+     */
+    public ArrayList<Participant> getJoueurs() {
+        return joueurs;
+    }
 }

@@ -46,13 +46,14 @@ public class VueModif extends Observable{
     
     
     @SuppressWarnings("Convert2Lambda")
-    public VueModif(String clé, String surnomParDefaut, int prefParDefaut) {
+    public VueModif(int clé, String surnomParDefaut, int prefParDefaut) {
         
         window = new JFrame();
         // Définit la taille de la fenêtre en pixels
         window.setSize(550, 300);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width/2-window.getSize().width/2, dim.height/2-window.getSize().height/2);
+        window.setResizable(false);
         mainPanel = new PanelPerso(new BorderLayout());
         mainPanel.setOpaque(true);
         window.add(mainPanel);
@@ -83,10 +84,11 @@ public class VueModif extends Observable{
         Hashtable labelTable = new Hashtable();
         labelTable.put(1,new JLabel("Jeune"));
         labelTable.put(2,new JLabel("Adulte"));
-        labelTable.put(3,new JLabel("Agé"));
+        labelTable.put(3,new JLabel("Senior"));
         pref.setLabelTable(labelTable);
         pref.setPaintLabels(true);
         pref.addChangeListener(new ChangeListener(){
+            @Override
             public void stateChanged(ChangeEvent event) {
                 actualiserPref();
         }
@@ -113,7 +115,6 @@ public class VueModif extends Observable{
             public void actionPerformed(ActionEvent e) {
                 setChanged();
                 notifyObservers(new MessageParticipant(Action.VALIDE,clé, champSurnom.getText(),pref.getValue()));
-                System.out.println(pref.getValue());
                 clearChanged();
             }
         });

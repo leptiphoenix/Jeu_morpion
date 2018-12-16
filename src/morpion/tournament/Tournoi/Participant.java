@@ -5,8 +5,8 @@
  */
 package morpion.tournament.Tournoi;
 
-import java.util.HashMap;
-
+import java.util.ArrayList;
+import java.util.Comparator;
 import static morpion.tournament.Tournoi.Preference.*;
 
 /**
@@ -14,76 +14,18 @@ import static morpion.tournament.Tournoi.Preference.*;
  * @author deniaul
  */
 public class Participant {
-
-    /**
-     * @return the scoreTournoi
-     */
-    public Score getScoreTournoi() {
-        return scoreTournoi;
-    }
-
-    /**
-     * @param scoreTournoi the scoreTournoi to set
-     */
-    public void setScoreTournoi(Score scoreTournoi) {
-        this.scoreTournoi = scoreTournoi;
-    }
-
-    /**
-     * @return the scorePool
-     */
-    public Score getScorePool() {
-        return scorePool;
-    }
-
-    /**
-     * @param scorePool the scorePool to set
-     */
-    public void setScorePool(Score scorePool) {
-        this.scorePool = scorePool;
-    }
-
-    /**
-     * @return the historiquePool
-     */
-    public HashMap<Integer,Score> getHistoriquePool() {
-        return historiquePool;
-    }
-
-    /**
-     * @param historiquePool the historiquePool to set
-     */
-    public void setHistoriquePool(HashMap<Integer,Score> historiquePool) {
-        this.historiquePool = historiquePool;
-    }
-
-    /**
-     * @return the historiqueTournoi
-     */
-    public HashMap<Integer,Score> getHistoriqueTournoi() {
-        return historiqueTournoi;
-    }
-
-    /**
-     * @param historiqueTournoi the historiqueTournoi to set
-     */
-    public void setHistoriqueTournoi(HashMap<Integer,Score> historiqueTournoi) {
-        this.historiqueTournoi = historiqueTournoi;
-    }
     
-    String surnom;
-    Score scoreTournoi;
-    Score scorePool;
-    HashMap<Integer,Score> historiquePool;
-    HashMap<Integer,Score> historiqueTournoi;
-    Preference pref;
+    private String surnom;
+    private Score scoreTournoi;
+    private Score scorePool;
+    private ArrayList<Resultat> historiquePool = null;
+    private ArrayList<ArrayList<Resultat>> historiqueTournoi = new ArrayList<ArrayList<Resultat>>();
+    private Preference pref;
  
     public Participant(String surnom,int pref){
         setSurnom(surnom);
         scoreTournoi = new Score();
         scorePool = new Score();
-        historiquePool = new HashMap<>();
-        historiqueTournoi = new HashMap<>();
         if (pref==1) {
             setPref(JEUNE);
         } else if (pref==2) {
@@ -92,7 +34,52 @@ public class Participant {
             setPref(VIEUX);
         }
     }
+    public static Comparator<Participant> score = new Comparator<Participant>() {
 
+        @Override
+        public int compare(Participant p1, Participant p2) {
+            return p2.getScoreTournoi().getPoints() - p1.getScoreTournoi().getPoints();
+        }
+    };
+    public void nouvellePool(){
+        if (!(historiquePool==null)){
+        historiqueTournoi.add(getHistoriquePool());}
+        historiquePool = new ArrayList<Resultat>() ;
+    }
+    
+    public static Comparator<Participant> nom = new Comparator<Participant>() {
+
+        @Override
+        public int compare(Participant p1, Participant p2) {
+            return p1.getSurnom().compareTo(p2.getSurnom());
+        }
+    };
+    
+    public void enregistrerPartie(Resultat resultat){
+        getHistoriquePool().add(resultat);
+        switch (resultat){
+            case VICTOIRE:
+                scorePool.setVictoire(scorePool.getVictoire()+1);
+                break;
+            case EGALITE:
+                scorePool.setEgalite(scorePool.getEgalite()+1);
+                break;
+            case DEFAITE:
+                scorePool.setDefaite(scorePool.getDefaite()+1);
+                break;
+        }
+    }
+    
+    @Override
+//    public int compare(Participant p) {
+//        return p.getScoreTournoi().getPoints() - getScoreTournoi().getPoints();
+//
+//    }
+    
+    public String toString() {
+        return "[ Surnom=" + surnom + ", scoreTouroi=" + getScoreTournoi() + ", scorePool=" + getScorePool() + "]";
+    }
+    
     /**
      * @return the surnom
      */
@@ -120,4 +107,27 @@ public class Participant {
     public Preference getPref() {
         return pref;
     }
+
+    /**
+     * @return the scoreTournoi
+     */
+    public Score getScoreTournoi() {
+        return scoreTournoi;
+    }
+
+    /**
+     * @return the scorePool
+     */
+    public Score getScorePool() {
+        return scorePool;
+    }
+
+    /**
+     * @return the historiquePool
+     */
+    public ArrayList<Resultat> getHistoriquePool() {
+        return historiquePool;
+    }
+
+
 }
