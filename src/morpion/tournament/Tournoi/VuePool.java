@@ -157,9 +157,10 @@ public class VuePool extends Observable {
                             pdp.getTournoi().getListeParticipants().get(listeBoites.indexOf(boitesCochées().get(1)))
                     ));
                     clearChanged();
+                    ((JLabel)selectionPanel.getComponent(1)).setText("Partie en cours");
                 }
                 else{
-                    
+                    selectionPanel.getComponent(1).setForeground(Color.red);
                 }
             }
         });

@@ -7,6 +7,7 @@ package morpion.tournament.Tournoi;
 
 import java.util.Observable;
 import java.util.Observer;
+import morpion.tournament.Partie.ControleurPartie;
 import morpion.tournament.Partie.Message.*;
 import morpion.tournament.Partie.VueGrille;
 
@@ -23,6 +24,8 @@ public class Controleur implements Observer {
     private VueModif vueModif;
     private Boolean erreur = false;
     private VueGrille vueGrille;
+    private ControleurPartie partie = null;
+    
 
     public Controleur() {
         tournoi = new Tournoi();
@@ -66,9 +69,15 @@ public class Controleur implements Observer {
                     vuePool = new VuePool(tournoi.getPhaseDePool());
                     vuePool.afficher();
                     vuePool.addObserver(this);
+                    tournoi.getVueScore().addObserver(this);
                 }
+            
+            }
                 
-            } else if (arg instanceof MessageParticipant) {
+             else if (((Message) arg).getAction() == Action.AFFICHESCORE) {
+                tournoi.afficherScore();  
+                
+            }   else if (arg instanceof MessageParticipant) {
                 MessageParticipant messageParticipant = (MessageParticipant) arg;
                 Participant p = new Participant(messageParticipant.getSurnom().trim(), messageParticipant.getPref());
                 if ((messageParticipant.getAction() == Action.VALIDE)) {
@@ -107,8 +116,8 @@ public class Controleur implements Observer {
                 }
             }   else if (arg instanceof MessageJeu) {
                 MessageJeu messageJeu = (MessageJeu) arg;
-                System.out.println(messageJeu.getP1().toString());
-                System.out.println(messageJeu.getP2().toString());
+                if (partie==null){
+                partie = new ControleurPartie(messageJeu.getP1(),messageJeu.getP2());}
             }
         }
     }

@@ -17,12 +17,16 @@ public class Tournoi {
 
     private ArrayList<Participant> listeParticipants = new ArrayList<>();
     private PhaseDePool phaseDePool = null;
+    VueScore vueScore ;
 
     public Tournoi() {
     }
     
     public void phaseSuivante(){
-        //if (phaseDePool == null){mélangerListe();}       
+        if (phaseDePool == null){
+            mélangerListe();
+            vueScore = new VueScore(listeParticipants);
+        }       
         nouvellePhaseDePool();
     }
 
@@ -59,7 +63,11 @@ public class Tournoi {
     public ArrayList<Participant> getListeParticipants() {
         return listeParticipants;
     }
-
+    
+    public void afficherScore(){
+        vueScore.afficher();
+    }
+    
     /**
      * @param aListeParticipants the listeParticipants to set
      */
@@ -72,5 +80,12 @@ public class Tournoi {
      */
     public PhaseDePool getPhaseDePool() {
         return phaseDePool;
+    }
+
+    /**
+     * @return the vueScore
+     */
+    public VueScore getVueScore() {
+        return vueScore;
     }
 }

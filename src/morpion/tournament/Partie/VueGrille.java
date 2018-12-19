@@ -45,7 +45,7 @@ public class VueGrille  extends Observable{
     public VueGrille(String joueur1,String joueur2) {
 
         window = new JFrame();
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
         window.setSize(750,300);
         window.setResizable(false);

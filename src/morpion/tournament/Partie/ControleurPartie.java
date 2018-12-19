@@ -5,22 +5,32 @@
  */
 package morpion.tournament.Partie;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 import morpion.tournament.Partie.Message.*;
+import morpion.tournament.Tournoi.Participant;
 
 /**
  *
  * @author deniaul
  */
-public class Controleur implements Observer{
+public class ControleurPartie implements Observer{
 
     
     private HashMap<Integer,Case> cases;
-    private HashMap<Integer,Joueur> joueurs;
+    private ArrayList<Joueur> joueurs = new ArrayList();
+    private VueGrille vueGrille;
     
-            
+    public ControleurPartie(Participant p1,Participant p2){
+        System.out.println("C'est parti");
+        joueurs.add(new Joueur(p1,Signe.X));
+        joueurs.add(new Joueur(p2,Signe.O));
+        vueGrille = new VueGrille(joueurs.get(0).getIdentité().getSurnom(),joueurs.get(1).getIdentité().getSurnom());
+        vueGrille.addObserver(this);
+        vueGrille.afficher();
+    }
     
     
     @Override

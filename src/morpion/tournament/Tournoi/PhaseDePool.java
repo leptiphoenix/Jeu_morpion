@@ -36,7 +36,7 @@ public class PhaseDePool {
         getTournoi().triScore();
         listePools = new ArrayList<>();
         for (int i = 0; i < (getTournoi().getListeParticipants().size()/3); i++) {
-            ArrayList<Participant> joueurs = new ArrayList<Participant>();
+            ArrayList<Participant> joueurs = new ArrayList<>();
             for (int j = i * 3; j < (i+1)*3; j++) {
                 joueurs.add(getTournoi().getListeParticipants().get(j));
             }
@@ -47,7 +47,7 @@ public class PhaseDePool {
                 getListePools().remove(getListePools().size()-1);
                 ArrayList<Participant> joueurs;
                 for (int i = 2; i >-1; i-=2) {
-                    joueurs = new ArrayList<Participant>();
+                    joueurs = new ArrayList<>();
                     for (int j = getTournoi().getListeParticipants().size()-i-2; j < getTournoi().getListeParticipants().size()-i; j++) {
                         joueurs.add(getTournoi().getListeParticipants().get(j));
                     }
@@ -55,7 +55,7 @@ public class PhaseDePool {
                 }
                 break;
             case 2:
-                joueurs = new ArrayList<Participant>();
+                joueurs = new ArrayList<>();
                 for (int i = getTournoi().getListeParticipants().size()-2; i < getTournoi().getListeParticipants().size(); i++) {
                     joueurs.add(getTournoi().getListeParticipants().get(i));
                 }

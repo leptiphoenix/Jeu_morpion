@@ -5,13 +5,36 @@
  */
 package morpion.tournament.Partie;
 
+import java.util.ArrayList;
+import morpion.tournament.Tournoi.Participant;
+
 /**
  *
  * @author deniaul
  */
 public class Joueur {
     
-    private Case caseCochees;
-    private Signe signe;
+    private ArrayList<Case> casesCochees = new ArrayList();
+    Signe signe;
+    Participant identité; 
     
+    
+    Joueur(Participant p, Signe s){
+        signe = s;
+        identité = p;
+    }
+
+    /**
+     * @return the signe
+     */
+    public Signe getSigne() {
+        return signe;
+    }
+
+    /**
+     * @return the identité
+     */
+    public Participant getIdentité() {
+        return identité;
+    }
 }

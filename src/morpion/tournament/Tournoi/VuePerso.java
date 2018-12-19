@@ -21,7 +21,7 @@ import morpion.tournament.Partie.Message.*;
  *
  * @author deniaul
  */
-public class VueResultats extends Observable{
+public class VuePerso extends Observable{
     
     private final JFrame window ;
     private final JButton btnSuivant;
@@ -32,7 +32,7 @@ public class VueResultats extends Observable{
     
     
     @SuppressWarnings("Convert2Lambda")
-    public VueResultats(String cléGagnant, String cléPerdant) {
+    public VuePerso(String cléGagnant, String cléPerdant) {
         
         window = new JFrame();
         // Définit la taille de la fenêtre en pixels
