@@ -9,11 +9,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -59,7 +61,8 @@ public class VueSelection extends Observable {
        bottomPanel = new PanelPerso(new GridLayout(1, 3));
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        btnAjouter = new JButton("Ajouter");
+        btnAjouter = new JButton(new ImageIcon(new ImageIcon("src/morpion/images/ajouter.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        btnAjouter.setText("ajouter");
         btnAjouter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,7 +75,8 @@ public class VueSelection extends Observable {
 
         casev(bottomPanel);
 
-        btnCommencer = new JButton("Commencer");
+        btnCommencer = new JButton(new ImageIcon(new ImageIcon("src/morpion/images/start.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        btnCommencer.setText("Commencer");
         btnCommencer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -94,14 +98,17 @@ public class VueSelection extends Observable {
             for (int i = 0; i < participants.size();i++) {
                 getContentPanel().add(new JLabel(participants.get(i).getSurnom()));
                 int clé = i;
-                JButton btn = new JButton("Modifier");
+                
+                JButton btn = new JButton(new ImageIcon(new ImageIcon("src/morpion/images/modifier.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+                btn.setText("Modifier");
                 btn.addActionListener((ActionEvent e) -> {
                     setChanged();
                     notifyObservers(new MessageCle(Action.MODIFIE, clé));
                     clearChanged();
                 });
                 getContentPanel().add(btn);
-                JButton btns = new JButton("Supprimer");
+                JButton btns = new JButton(new ImageIcon(new ImageIcon("src/morpion/images/supprimer.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+                btns.setText("Supprimer");
                 btns.addActionListener((ActionEvent e) -> {
                     setChanged();
                     notifyObservers(new MessageCle(Action.SUPPRIME, clé));
