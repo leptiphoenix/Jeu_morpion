@@ -13,4 +13,11 @@ public class ICase {
     private EtatCase etatCase;
     private int numero;
     
+        
+    public ICase(EtatCase etatcase,int numero){
+        this.etatCase=etatcase;
+        this.numero=numero;
+    }
+    
+    
 }
