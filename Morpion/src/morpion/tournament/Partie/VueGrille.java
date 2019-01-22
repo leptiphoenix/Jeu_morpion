@@ -50,21 +50,21 @@ public class VueGrille extends Observable {
     @SuppressWarnings("Convert2Lambda")
     public VueGrille(String joueur1, String joueur2) {
 
-        clic = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //setChanged();
-                //notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
-                //clearChanged();
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                //cocherCase(liste.indexOf(ic), Signe.X);
-            }
-
-            public void mouseExited(MouseEvent e) {
-                //cocherCase(liste.indexOf(ic), Signe.X);
-            }
-        };
+//        clic = new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                setChanged();
+//                notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
+//                clearChanged();
+//            }
+//
+//            public void mouseEntered(MouseEvent e) {
+//                cocherCase(liste.indexOf(ic), Signe.X);
+//            }
+//
+//            public void mouseExited(MouseEvent e) {
+//                cocherCase(liste.indexOf(ic), Signe.X);
+//            }
+//        };
         
         grillePanel = new PanelPerso(new GridLayout(3, 3));
         for (int i = 1; i < 10; i++) {
@@ -117,13 +117,35 @@ public class VueGrille extends Observable {
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
         for (ICase ic : liste) {
-            ic.getBouton().addActionListener(clic);
+            ic.getBouton().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cocherCase(liste.indexOf(ic),Signe.X);
+                setChanged();
+                notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
+                clearChanged();
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                cocherCase(liste.indexOf(ic), Signe.X);
+                setChanged();
+                clearChanged();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                decocherCase(liste.indexOf(ic), Signe.X);
+                setChanged();
+                clearChanged();
+            }
+        });
         }
 
     }
 
     public void cocherCase(int numCase, Signe signe) {
         liste.get(numCase).setEtatCase(signe);
+    }
+    public void decocherCase(int numCase, Signe signe) {
+        liste.get(numCase).setEtatCase(null);
     }
 
     public void afficher() {

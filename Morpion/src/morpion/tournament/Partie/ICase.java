@@ -30,8 +30,11 @@ public class ICase extends PanelPerso{
     public void setEtatCase(Signe signe) {
         if (signe==Signe.X){
             etatCase = EtatCase.X;}
-        else{
+        else if (signe==Signe.O){
             etatCase = EtatCase.O;
+        }
+        else{
+            etatCase = EtatCase.NON_COCHEE;
         }
         bouton.setText(etatCase.toString());
         bouton.setEnabled(false);
