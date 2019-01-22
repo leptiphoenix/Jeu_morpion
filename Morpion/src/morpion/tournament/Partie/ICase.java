@@ -5,19 +5,43 @@
  */
 package morpion.tournament.Partie;
 
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import morpion.tournament.Tournoi.PanelPerso;
+
 /**
  *
  * @author deniaul
  */
-public class ICase {
+public class ICase extends PanelPerso{
     private EtatCase etatCase;
-    private int numero;
+    private JButton bouton;
+    private ActionListener clic;
     
-        
-    public ICase(EtatCase etatcase,int numero){
-        this.etatCase=etatcase;
-        this.numero=numero;
+    ICase(){
+        etatCase = EtatCase.NON_COCHEE;
+        bouton=new JButton(etatCase.toString());
+        this.add(bouton);
     }
-    
+
+    /**
+     * @param etatCase the etatCase to set
+     */
+    public void setEtatCase(Signe signe) {
+        if (signe==Signe.X){
+            etatCase = EtatCase.X;}
+        else{
+            etatCase = EtatCase.O;
+        }
+        bouton.setText(etatCase.toString());
+        bouton.setEnabled(false);
+    }
+
+    /**
+     * @return the bouton
+     */
+    public JButton getBouton() {
+        return bouton;
+    }
     
 }
