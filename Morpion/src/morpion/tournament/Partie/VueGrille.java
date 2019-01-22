@@ -17,10 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.border.Border;
 import morpion.tournament.Partie.Message.Action;
 import morpion.tournament.Partie.Message.MessageCle;
@@ -45,26 +43,11 @@ public class VueGrille extends Observable {
     private Participant joueurCourant;
     private Border blackline = BorderFactory.createLineBorder(Color.black, 1);
     private ArrayList<ICase> liste = new ArrayList<>();
-    private ActionListener clic;
 
     @SuppressWarnings("Convert2Lambda")
     public VueGrille(String joueur1, String joueur2) {
 
-//        clic = new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                setChanged();
-//                notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
-//                clearChanged();
-//            }
-//
-//            public void mouseEntered(MouseEvent e) {
-//                cocherCase(liste.indexOf(ic), Signe.X);
-//            }
-//
-//            public void mouseExited(MouseEvent e) {
-//                cocherCase(liste.indexOf(ic), Signe.X);
-//            }
-//        };
+     
         
         grillePanel = new PanelPerso(new GridLayout(3, 3));
         for (int i = 1; i < 10; i++) {
@@ -115,32 +98,61 @@ public class VueGrille extends Observable {
         contentPanel.add(grillePanel);
 
         mainPanel.add(contentPanel, BorderLayout.CENTER);
+        
+        joueurCourant.setSurnom(joueur1);
 
         for (ICase ic : liste) {
+            if(joueurCourant.getSurnom().equals(joueur1)){
             ic.getBouton().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                cocherCase(liste.indexOf(ic),Signe.X);
                 setChanged();
+                cocherCase(liste.indexOf(ic),Signe.X);
                 notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
                 clearChanged();
             }
 
             public void mouseEntered(MouseEvent e) {
-                cocherCase(liste.indexOf(ic), Signe.X);
                 setChanged();
+                cocherCase(liste.indexOf(ic), Signe.X);
                 clearChanged();
             }
 
             public void mouseExited(MouseEvent e) {
-                decocherCase(liste.indexOf(ic), Signe.X);
                 setChanged();
+                decocherCase(liste.indexOf(ic), Signe.X);
                 clearChanged();
             }
         });
+        } else {
+            ic.getBouton().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                cocherCase(liste.indexOf(ic),Signe.O);
+                notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
+                clearChanged();
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                setChanged();
+                cocherCase(liste.indexOf(ic), Signe.O);
+                clearChanged();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                setChanged();
+                decocherCase(liste.indexOf(ic), Signe.O);
+                clearChanged(); 
+            }
+            });
         }
-
+        }
     }
-
+    
+    public void actualiserPartie(){
+        
+        
+    }
+        
     public void cocherCase(int numCase, Signe signe) {
         liste.get(numCase).setEtatCase(signe);
     }

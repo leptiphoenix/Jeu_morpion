@@ -126,7 +126,7 @@ public class VueSelection extends Observable {
     
     
     public void msgErreur(){
-        ((JLabel) getBottomPanel().getComponent(1)).setText("Deux participants au moins sont nécessaire");
+        ((JLabel) getBottomPanel().getComponent(1)).setText("Deux participants au moins sont nécessaires");
         ((JLabel) getBottomPanel().getComponent(1)).setForeground(Color.red);
         afficher();
     }

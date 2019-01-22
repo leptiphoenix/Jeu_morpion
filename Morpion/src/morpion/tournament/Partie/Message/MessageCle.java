@@ -15,12 +15,8 @@ public class MessageCle extends Message{
       public MessageCle(Action action,int clé){
         super(action);
         setClé(clé);
-      
-
     }
-       
-      
-      
+
     /**
      * @return the clé
      */

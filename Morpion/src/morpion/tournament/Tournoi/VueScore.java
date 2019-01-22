@@ -20,8 +20,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
-import morpion.tournament.Partie.Message.Action;
-import morpion.tournament.Partie.Message.Message;
 
 /**
  *

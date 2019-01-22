@@ -10,22 +10,22 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 import morpion.tournament.Partie.Message.Action;
 import morpion.tournament.Partie.Message.Message;
 import morpion.tournament.Partie.Message.MessageJeu;
-import morpion.tournament.Partie.Message.MessageParticipant;
 
 /**
  *
@@ -55,7 +55,7 @@ public class VuePool extends Observable {
         window = new JFrame();
         window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         // Définit la taille de la fenêtre en pixels
-        window.setSize(1000, 100 + 50 * pdp.getListePools().size());
+        window.setSize(1200, 200 + 50 * pdp.getListePools().size());
         window.setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
@@ -119,7 +119,8 @@ public class VuePool extends Observable {
         PanelPerso bottomPanel = new PanelPerso(new GridLayout(1, 7));
         casev(bottomPanel);
 
-        btnRegles = new JButton("Règles du jeu");
+        btnRegles = new JButton(new ImageIcon(new ImageIcon("src/morpion/images/regles.jpg").getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH)));
+        btnRegles.setText("Règles du jeu");
         btnRegles.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -132,7 +133,8 @@ public class VuePool extends Observable {
 
         casev(bottomPanel);
 
-        btnScoreGeneral = new JButton("Score général");
+        btnScoreGeneral = new JButton(new ImageIcon(new ImageIcon("src/morpion/images/scoreGeneral.jpg").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        btnScoreGeneral.setText("Score général");
         btnScoreGeneral.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -145,7 +147,9 @@ public class VuePool extends Observable {
 
         casev(bottomPanel);
 
-        btnJouer = new JButton("Jouer");
+        
+        btnJouer = new JButton(new ImageIcon(new ImageIcon("src/morpion/images/jouer.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        btnJouer.setText("Jouer");
         btnJouer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
