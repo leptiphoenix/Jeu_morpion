@@ -41,13 +41,16 @@ public class VueGrille extends Observable {
     private PanelPerso textePanel;
     private PanelPerso partiePanel;
     private Participant joueurCourant;
+    private String joueur1;
+    private String joueur2;
     private Border blackline = BorderFactory.createLineBorder(Color.black, 1);
     private ArrayList<ICase> liste = new ArrayList<>();
 
     @SuppressWarnings("Convert2Lambda")
     public VueGrille(String joueur1, String joueur2) {
-
-     
+        
+        this.joueur1=joueur1;
+        this.joueur2=joueur2;
         
         grillePanel = new PanelPerso(new GridLayout(3, 3));
         for (int i = 1; i < 10; i++) {
@@ -94,12 +97,13 @@ public class VueGrille extends Observable {
         contentPanel.add(closePanel);
         contentPanel.add(infosPanel);
         casev(contentPanel);
-        contentPanel.add(new JLabel("Tour du joueur : " + getJoueurCourant()));
+        contentPanel.add(new JLabel("Tour du joueur : " + getJoueurCourant().getSurnom()));
         contentPanel.add(grillePanel);
 
         mainPanel.add(contentPanel, BorderLayout.CENTER);
         
         joueurCourant.setSurnom(joueur1);
+        
 
         for (ICase ic : liste) {
             if(joueurCourant.getSurnom().equals(joueur1)){
@@ -147,11 +151,56 @@ public class VueGrille extends Observable {
         }
         }
     }
-    
-    public void actualiserPartie(){
-        
-        
+  
+    public void actualiserPartie(Joueur joueurActuel){
+        joueurCourant.setSurnom(joueurActuel.getIdentité().getSurnom());
+        for (ICase ic : liste) {
+            if(joueurCourant.getSurnom().equals(joueur1)){
+            ic.getBouton().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                cocherCase(liste.indexOf(ic),Signe.X);
+                notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
+                clearChanged();
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                setChanged();
+                cocherCase(liste.indexOf(ic), Signe.X);
+                clearChanged();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                setChanged();
+                decocherCase(liste.indexOf(ic), Signe.X);
+                clearChanged();
+            }
+        });
+        } else {
+            ic.getBouton().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                cocherCase(liste.indexOf(ic),Signe.O);
+                notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
+                clearChanged();
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                setChanged();
+                cocherCase(liste.indexOf(ic), Signe.O);
+                clearChanged();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                setChanged();
+                decocherCase(liste.indexOf(ic), Signe.O);
+                clearChanged(); 
+            }
+            });
+        }
+        }
     }
+    
         
     public void cocherCase(int numCase, Signe signe) {
         liste.get(numCase).setEtatCase(signe);

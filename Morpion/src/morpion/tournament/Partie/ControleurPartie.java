@@ -29,6 +29,7 @@ public class ControleurPartie implements Observer{
         System.out.println("C'est parti");
         joueurs[0]=(new Joueur(p1,Signe.X));
         joueurs[1]=(new Joueur(p2,Signe.O));
+        System.out.println(p1.getSurnom());
         vueGrille = new VueGrille(joueurs[0].getIdentité().getSurnom(),joueurs[1].getIdentité().getSurnom());
         vueGrille.addObserver(this);
         vueGrille.afficher();
@@ -44,7 +45,7 @@ public class ControleurPartie implements Observer{
     
     public void verifierFinPartie(){
         ArrayList<Integer> listeCasesJoueur= new ArrayList<>();
-        //if (!touteqsCartesCochees){
+        if (!toutesCartesCochees()){
             for (Integer numCase : cases.keySet()){
                 if (cases.get(numCase).getJoueurAyantCoche()==joueurActuel){
                     listeCasesJoueur.add(numCase);
@@ -71,18 +72,31 @@ public class ControleurPartie implements Observer{
              if (listeCasesJoueur.contains(3) && listeCasesJoueur.contains(5) && listeCasesJoueur.contains(7)){
                     finMatch();
              }   
-            
-            
-//            
-//        } else {
-//            matchNul();
-//        }
+        } else {
+            matchNul();
+        }
+    }
+    
+    public boolean toutesCartesCochees(){
+        int nb=0;
+        for (Integer numCase : cases.keySet()){
+         nb++;           
+        }
+        return (nb==9);
+    }
+    
+    public void matchNul(){
+    //Gérer le match nul    
     }
     
     public void nextTurn(){
         joueurSuivant();
         verifierFinPartie();
-        
+        actualiserVueGrille();
+    }
+    
+    public void actualiserVueGrille(){
+    vueGrille.actualiserPartie(joueurActuel);
     }
 
     @Override
@@ -136,8 +150,5 @@ public class ControleurPartie implements Observer{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void matchNul() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }
