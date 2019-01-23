@@ -5,29 +5,35 @@
  */
 package morpion.tournament.Partie;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.util.Observable;
 import javax.swing.JButton;
+import morpion.tournament.Partie.Message.Action;
+import morpion.tournament.Partie.Message.MessageCle;
 import morpion.tournament.Tournoi.PanelPerso;
 
 /**
  *
  * @author deniaul
  */
-public class ICase extends PanelPerso{
+public class ICase extends Observable{
+    private int position;
     private EtatCase etatCase;
     private JButton bouton;
-    private ActionListener clic;
+    private ActionListener clic = null;
     
-    ICase(){
+    ICase(int pos){
+        position = pos;
         etatCase = EtatCase.NON_COCHEE;
         bouton=new JButton(etatCase.toString());
-        this.add(bouton);
     }
 
     /**
      * @param etatCase the etatCase to set
      */
-    public void setEtatCase(Signe signe) {
+    public void setEtatCase(boolean prévisualisation,Signe signe) {
         if (signe==Signe.X){
             etatCase = EtatCase.X;}
         else if (signe==Signe.O){
@@ -36,8 +42,9 @@ public class ICase extends PanelPerso{
         else{
             etatCase = EtatCase.NON_COCHEE;
         }
-        bouton.setText(etatCase.toString());
-        bouton.setEnabled(false);
+        bouton.setText(signe.toString());
+        if (!prévisualisation)
+            bouton.setEnabled(false);
     }
 
     /**
@@ -47,4 +54,38 @@ public class ICase extends PanelPerso{
         return bouton;
     }
     
+    public void addActionListener(Signe signe)
+    {
+        if (clic==null){
+        clic =new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                setEtatCase(false,signe);
+                System.out.println(position);
+                notifyObservers(new MessageCle(Action.COCHER_CASE,position));
+                clearChanged();
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                setChanged();
+                System.out.println("enter "+position);
+                setEtatCase(true,signe);
+                clearChanged();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                setChanged();
+                System.out.println("exit "+position);
+                setEtatCase(true, null);
+                clearChanged();
+            }
+        };
+        bouton.addActionListener(clic);}
+        else{System.out.println("pas plus de 1 actionlistener");}
+    }
+    
+    public void removeActionListener(){
+        bouton.removeActionListener(clic);
+        clic = null;
+    }
 }

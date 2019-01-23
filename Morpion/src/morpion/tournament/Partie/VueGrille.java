@@ -10,9 +10,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -40,20 +37,21 @@ public class VueGrille extends Observable {
     private PanelPerso grillePanel;
     private PanelPerso textePanel;
     private PanelPerso partiePanel;
-    private Participant joueurCourant;
+    private HashMap<String,Signe> joueurs = new HashMap();
+    private Signe signeCourant = Signe.X;
     private Border blackline = BorderFactory.createLineBorder(Color.black, 1);
     private ArrayList<ICase> liste = new ArrayList<>();
 
     @SuppressWarnings("Convert2Lambda")
     public VueGrille(String joueur1, String joueur2) {
-
-     
+        joueurs.put(joueur1, Signe.X);
+        joueurs.put(joueur2, Signe.O);
         
         grillePanel = new PanelPerso(new GridLayout(3, 3));
         for (int i = 1; i < 10; i++) {
-            ICase casei = new ICase();
+            ICase casei = new ICase(i);
             liste.add(casei);
-            grillePanel.add(casei);
+            grillePanel.add(casei.getBouton());
         }
 
         grillePanel.setBorder(blackline);
@@ -94,71 +92,29 @@ public class VueGrille extends Observable {
         contentPanel.add(closePanel);
         contentPanel.add(infosPanel);
         casev(contentPanel);
-        contentPanel.add(new JLabel("Tour du joueur : " + getJoueurCourant()));
+        contentPanel.add(new JLabel("Tour du joueur : " + joueurs.get(signeCourant)));
         contentPanel.add(grillePanel);
 
         mainPanel.add(contentPanel, BorderLayout.CENTER);
         
-        joueurCourant.setSurnom(joueur1);
 
         for (ICase ic : liste) {
-            if(joueurCourant.getSurnom().equals(joueur1)){
-            ic.getBouton().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setChanged();
-                cocherCase(liste.indexOf(ic),Signe.X);
-                notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
-                clearChanged();
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                setChanged();
-                cocherCase(liste.indexOf(ic), Signe.X);
-                clearChanged();
-            }
-
-            public void mouseExited(MouseEvent e) {
-                setChanged();
-                decocherCase(liste.indexOf(ic), Signe.X);
-                clearChanged();
-            }
-        });
-        } else {
-            ic.getBouton().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setChanged();
-                cocherCase(liste.indexOf(ic),Signe.O);
-                notifyObservers(new MessageCle(Action.COCHER_CASE,liste.indexOf(ic)));
-                clearChanged();
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                setChanged();
-                cocherCase(liste.indexOf(ic), Signe.O);
-                clearChanged();
-            }
-
-            public void mouseExited(MouseEvent e) {
-                setChanged();
-                decocherCase(liste.indexOf(ic), Signe.O);
-                clearChanged(); 
-            }
-            });
-        }
+            ic.addActionListener(signeCourant);
         }
     }
     
-    public void actualiserPartie(){
-        
+    public void nextTurn(){
+        if (signeCourant==Signe.X)
+            {signeCourant=Signe.O;}
+        else
+            {signeCourant=Signe.X;}
+        for (ICase ic : liste) {
+            ic.removeActionListener();
+            ic.addActionListener(signeCourant);
+        }
         
     }
-        
-    public void cocherCase(int numCase, Signe signe) {
-        liste.get(numCase).setEtatCase(signe);
-    }
-    public void decocherCase(int numCase, Signe signe) {
-        liste.get(numCase).setEtatCase(null);
-    }
+
 
     public void afficher() {
         this.window.setVisible(true);
@@ -172,10 +128,4 @@ public class VueGrille extends Observable {
         this.window.dispose();
     }
 
-    /**
-     * @return the joueurCourant
-     */
-    public Participant getJoueurCourant() {
-        return joueurCourant;
-    }
 }
