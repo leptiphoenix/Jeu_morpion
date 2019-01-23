@@ -12,21 +12,24 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Observable;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
-import morpion.tournament.Partie.Message.Action;
-import morpion.tournament.Partie.Message.MessageCle;
 import morpion.tournament.Tournoi.PanelPerso;
-import morpion.tournament.Tournoi.Participant;
 
 /**
  *
  * @author deniaul
  */
-public class VueGrille extends Observable {
+public class VueGrille {
+
+    /**
+     * @return the liste
+     */
+    public ArrayList<ICase> getListe() {
+        return liste;
+    }
 
     private HashMap<Integer, ICase> listeCases;
     private final JFrame window;
@@ -40,7 +43,7 @@ public class VueGrille extends Observable {
     private HashMap<String,Signe> joueurs = new HashMap();
     private Signe signeCourant = Signe.X;
     private Border blackline = BorderFactory.createLineBorder(Color.black, 1);
-    private ArrayList<ICase> liste = new ArrayList<>();
+    ArrayList<ICase> liste = new ArrayList<>();
 
     @SuppressWarnings("Convert2Lambda")
     public VueGrille(String joueur1, String joueur2) {
@@ -108,7 +111,7 @@ public class VueGrille extends Observable {
             {signeCourant=Signe.O;}
         else
             {signeCourant=Signe.X;}
-        for (ICase ic : liste) {
+        for (ICase ic : getListe()) {
             ic.removeActionListener();
             ic.addActionListener(signeCourant);
         }

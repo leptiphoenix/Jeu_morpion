@@ -33,7 +33,7 @@ public class ICase extends Observable{
     /**
      * @param etatCase the etatCase to set
      */
-    public void setEtatCase(boolean prévisualisation,Signe signe) {
+    public void setEtatCase(Signe signe) {
         if (signe==Signe.X){
             etatCase = EtatCase.X;}
         else if (signe==Signe.O){
@@ -43,7 +43,6 @@ public class ICase extends Observable{
             etatCase = EtatCase.NON_COCHEE;
         }
         bouton.setText(signe.toString());
-        if (!prévisualisation)
             bouton.setEnabled(false);
     }
 
@@ -59,24 +58,9 @@ public class ICase extends Observable{
         if (clic==null){
         clic =new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                setEtatCase(signe);
                 setChanged();
-                setEtatCase(false,signe);
-                System.out.println(position);
                 notifyObservers(new MessageCle(Action.COCHER_CASE,position));
-                clearChanged();
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                setChanged();
-                System.out.println("enter "+position);
-                setEtatCase(true,signe);
-                clearChanged();
-            }
-
-            public void mouseExited(MouseEvent e) {
-                setChanged();
-                System.out.println("exit "+position);
-                setEtatCase(true, null);
                 clearChanged();
             }
         };

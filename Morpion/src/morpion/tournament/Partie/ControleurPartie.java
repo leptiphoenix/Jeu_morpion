@@ -20,7 +20,7 @@ import morpion.tournament.Partie.Message.MessagePartie;
 public class ControleurPartie implements Observer{
 
     
-    private HashMap<Integer,Case> cases;
+    private HashMap<Integer,Case> cases = new HashMap();
     private Joueur[] joueurs = new Joueur[2];
     private VueGrille vueGrille;
     private Joueur joueurActuel;
@@ -30,7 +30,10 @@ public class ControleurPartie implements Observer{
         joueurs[0]=(new Joueur(p1,Signe.X));
         joueurs[1]=(new Joueur(p2,Signe.O));
         vueGrille = new VueGrille(joueurs[0].getIdentité().getSurnom(),joueurs[1].getIdentité().getSurnom());
-        vueGrille.addObserver(this);
+        for(ICase ic:vueGrille.getListe())
+        {
+            ic.addObserver(this);
+        }
         vueGrille.afficher();
     }
     
@@ -87,11 +90,11 @@ public class ControleurPartie implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof MessagePartie) {
-            MessagePartie messagePartie = (MessagePartie) arg;
-            if (messagePartie.getAction()==Action.COCHER_CASE) {
-                getCases().get(messagePartie.getNumCase()).setJoueurAyantCoche(messagePartie.getJoueur());
-                //Cocher avec la vue
+        if (arg instanceof MessageCle) {
+            MessageCle messageCle = (MessageCle) arg;
+            if (messageCle.getAction()==Action.COCHER_CASE) {
+                cases.put(messageCle.getClé(),new Case(messageCle.getClé(),joueurActuel));
+                System.out.println("suivant");
                 nextTurn();
             }
         }
