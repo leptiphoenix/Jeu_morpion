@@ -86,7 +86,8 @@ public class ControleurPartie implements Observer{
     }
     
     public void matchNul(){
-    //Gérer le match nul    
+      
+        
     }
     
     public void nextTurn(){
@@ -96,7 +97,7 @@ public class ControleurPartie implements Observer{
     }
     
     public void actualiserVueGrille(){
-    vueGrille.actualiserPartie(joueurActuel);
+    //vueGrille.actualiserPartie(joueurActuel);
     }
 
     @Override
