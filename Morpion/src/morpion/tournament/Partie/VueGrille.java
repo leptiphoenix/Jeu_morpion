@@ -40,16 +40,15 @@ public class VueGrille {
     private PanelPerso grillePanel;
     private PanelPerso textePanel;
     private PanelPerso partiePanel;
-    private HashMap<String,Signe> joueurs = new HashMap();
+    private HashMap<Signe,String> joueurs = new HashMap();
     private Signe signeCourant = Signe.X;
     private Border blackline = BorderFactory.createLineBorder(Color.black, 1);
     ArrayList<ICase> liste = new ArrayList<>();
 
     @SuppressWarnings("Convert2Lambda")
     public VueGrille(String joueur1, String joueur2) {
-        joueurs.put(joueur1, Signe.X);
-        joueurs.put(joueur2, Signe.O);
-        
+        joueurs.put(Signe.X,joueur1);
+        joueurs.put(Signe.O,joueur2);
         grillePanel = new PanelPerso(new GridLayout(3, 3));
         for (int i = 1; i < 10; i++) {
             ICase casei = new ICase(i);
@@ -95,16 +94,19 @@ public class VueGrille {
         contentPanel.add(closePanel);
         contentPanel.add(infosPanel);
         casev(contentPanel);
+
         contentPanel.add(new JLabel("Tour du joueur : " + joueurs.get(signeCourant)));
+
         contentPanel.add(grillePanel);
 
         mainPanel.add(contentPanel, BorderLayout.CENTER);
-        
+
 
         for (ICase ic : liste) {
             ic.addActionListener(signeCourant);
         }
     }
+
     
     public void nextTurn(){
         if (signeCourant==Signe.X)
@@ -114,8 +116,7 @@ public class VueGrille {
         for (ICase ic : getListe()) {
             ic.removeActionListener();
             ic.addActionListener(signeCourant);
-        }
-        
+        }      
     }
 
 

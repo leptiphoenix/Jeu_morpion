@@ -185,7 +185,7 @@ public class VuePool extends Observable {
         }
     }
     public ArrayList<JCheckBox> boitesCochées(){
-        ArrayList<JCheckBox> boites = new ArrayList<JCheckBox>();
+        ArrayList<JCheckBox> boites = new ArrayList<>();
                         for (JCheckBox b: listeBoites){
                             if (b.isSelected()){
                                 boites.add(b);
@@ -193,6 +193,7 @@ public class VuePool extends Observable {
                         }
                         return boites;
     }
+    
     public void actualiser(Boolean b) {
         for (Participant pa : pdp.getTournoi().getListeParticipants()) {
             if (!(listeBoites.get(pdp.getTournoi().getListeParticipants().indexOf(pa)).isSelected())){
@@ -200,6 +201,7 @@ public class VuePool extends Observable {
             }
         }
     }
+    
     public void actualiser(Participant p) {
         for (Participant pa : pdp.getTournoi().getListeParticipants()) {
 //Une autre manière de faire, compliquée, qui marche, mais très long à écrire et débugguer..... Ca m'apprendras à ne pas prendre de recul

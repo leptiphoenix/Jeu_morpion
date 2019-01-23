@@ -6,6 +6,7 @@
 package morpion.tournament.Tournoi;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 
@@ -17,7 +18,7 @@ public class PanelPerso extends JPanel{
     public PanelPerso(){
         super();
         setOpaque(false);
-    }
+   }
 
     public PanelPerso(BorderLayout borderLayout) {
         super(borderLayout);

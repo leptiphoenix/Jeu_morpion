@@ -9,7 +9,6 @@ import java.util.Observable;
 import java.util.Observer;
 import morpion.tournament.Partie.ControleurPartie;
 import morpion.tournament.Partie.Message.*;
-import morpion.tournament.Partie.VueGrille;
 
 /**
  *
@@ -22,8 +21,6 @@ public class Controleur implements Observer {
     private VueScore vueScore;
     private Tournoi tournoi;
     private VueModif vueModif;
-    private Boolean erreur = false;
-    private VueGrille vueGrille;
     private ControleurPartie partie = null;
     
 
@@ -77,7 +74,8 @@ public class Controleur implements Observer {
              else if (((Message) arg).getAction() == Action.AFFICHESCORE) {
                 tournoi.afficherScore();  
                 
-            }   else if (arg instanceof MessageParticipant) {
+            }   
+             else if (arg instanceof MessageParticipant) {
                 MessageParticipant messageParticipant = (MessageParticipant) arg;
                 Participant p = new Participant(messageParticipant.getSurnom().trim(), messageParticipant.getPref());
                 if ((messageParticipant.getAction() == Action.VALIDE)) {
@@ -94,8 +92,6 @@ public class Controleur implements Observer {
                             ((VueModif) o).actualiser(true);
                         }
                     } else {
-                        System.out.println(p.getSurnom());
-                        System.out.println(tournoi.getListeParticipants().get(messageParticipant.getClé()));
                         if (tournoi.ListePContient(p)&& !(p.getSurnom().equals(tournoi.getListeParticipants().get(messageParticipant.getClé()).getSurnom()))) {
                             ((VueModif) o).actualiser(true);
                         } else {
@@ -105,7 +101,8 @@ public class Controleur implements Observer {
                         }
                     }
                 }
-            } else if (arg instanceof MessageCle) {
+            }
+             else if (arg instanceof MessageCle) {
                 MessageCle messageCle = (MessageCle) arg;
                 if (messageCle.getAction() == Action.MODIFIE) {
                     ajouter(messageCle.getClé(), tournoi.getListeParticipants().get(messageCle.getClé()).getSurnom(), tournoi.getListeParticipants().get(messageCle.getClé()).getPref());
@@ -114,7 +111,8 @@ public class Controleur implements Observer {
                     vueSelection.actualiser(tournoi.getListeParticipants());
                     vueSelection.afficher();
                 }
-            }   else if (arg instanceof MessageJeu) {
+            }
+             else if (arg instanceof MessageJeu) {
                 MessageJeu messageJeu = (MessageJeu) arg;
                 if (partie==null){
                 partie = new ControleurPartie(messageJeu.getP1(),messageJeu.getP2());}
